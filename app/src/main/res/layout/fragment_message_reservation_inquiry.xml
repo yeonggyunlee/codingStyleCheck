@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="viewmodel.ScheduleMessageInquiryViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <!-- toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_message_reservation_inquiry"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/toolbar_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_left"
+            app:title="@string/schedule_msg" />
+
+        <!-- 상단 div -->
+        <View
+            android:id="@+id/v_toolbar_div"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/reservation_inquiry_div"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_message_reservation_inquiry" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/sv_message_reservation_inquiry"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/background_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_toolbar_div">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="12dp">
+
+                <!-- 발송 실패 메시지-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_reservation_inquiry_send_fail"
+                    showReservationWarning="@{viewModel.messageReservationDetail.status}"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:background="@color/reservation_inquiry_send_fail_background"
+                    android:drawableLeft="@drawable/ic_caution"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:text="@string/schedule_msg_failed"
+                    android:textColor="@color/reservation_inquiry_send_fail_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="예약 메시지를 발송하지 못했습니다." />
+
+                <!-- 프로필 -->
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_reservation_inquiry_profile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="14dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_reservation_inquiry_send_fail"
+                    app:profile="@{viewModel.messageReservationDetail.writeProfileUrl}"
+                    app:srcCompat="@drawable/ic_profile_cir"
+                    tools:srcCompat="@drawable/ic_profile_cir" />
+
+                <!-- 프로필 생일 라운드 -->
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_birthday_circle"
+                    style="@style/Birthday.Profile.Circle.Bg"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_circle_red_2dp"
+                    android:visibility="@{viewModel.messageReservationDetail.isBirthday ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_reservation_inquiry_profile"
+                    app:layout_constraintEnd_toEndOf="@id/iv_reservation_inquiry_profile"
+                    app:layout_constraintStart_toStartOf="@id/iv_reservation_inquiry_profile"
+                    app:layout_constraintTop_toTopOf="@id/iv_reservation_inquiry_profile"
+                    tools:visibility="visible" />
+
+                <!-- 생일 케이크 -->
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_reservation_inquiry_birthday_cake"
+                    style="@style/Birthday.Profile.Cake.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:visibility="@{viewModel.messageReservationDetail.isBirthday ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toEndOf="@id/iv_reservation_inquiry_profile"
+                    app:layout_constraintTop_toTopOf="@id/iv_reservation_inquiry_profile"
+                    tools:visibility="gone" />
+
+                <!-- 이름, 상태메시지 영역 -->
+                <com.custom.app.views.ProfileNameLinearLayout
+                    android:id="@+id/ll_reservation_inquiry_name_area"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_reservation_inquiry_birthday_cake"
+                    app:layout_constraintTop_toTopOf="@id/iv_reservation_inquiry_profile"
+                    app:layout_goneMarginStart="12dp">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_reservation_inquiry_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@{viewModel.messageReservationDetail.writeName}"
+                        android:textColor="@color/text_color_selector"
+                        android:textSize="@dimen/text_size_14sp"
+                        android:textStyle="bold"
+                        tools:text="Happy Good Nice Wow Mobile Android IOS" />
+
+                    <com.custom.ProfileStateTextView
+                        android:id="@+id/tv_reservation_inquiry_state"
+                        style="@style/Profile.State"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:gravity="start"
+                        android:text="@{viewModel.messageReservationDetail.stateMessage}"
+                        android:textColor="@color/rgb_999999"
+                        android:textSize="@dimen/text_size_12sp"
+                        tools:text="##############" />
+                </com.custom.app.views.ProfileNameLinearLayout>
+
+                <!-- 작성 날짜 -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_reservation_inquiry_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/reservation_inquiry_write_date_text"
+                    android:textSize="@dimen/text_size_12sp"
+                    app:layout_constraintStart_toStartOf="@id/iv_reservation_inquiry_birthday_cake"
+                    app:layout_constraintTop_toBottomOf="@id/ll_reservation_inquiry_name_area"
+                    app:layout_goneMarginStart="12dp"
+                    app:setReservationCreateDate="@{viewModel.messageReservationDetail.createDate}"
+                    tools:text="2021/12/05 12:30" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_reservation_top_area"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/bg_round_box_light_gray"
+                    android:paddingVertical="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_reservation_inquiry_profile">
+
+                    <!-- 대화방 타이틀 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_reservation_inquiry_room"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/title_topic_room"
+                        android:textColor="@color/reservation_inquiry_text"
+                        android:textSize="@dimen/text_size_12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="トークルーム" />
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier_todo_calendar_child"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="end"
+                        app:constraint_referenced_ids="tv_reservation_inquiry_room, tv_reservation_inquiry_send_due_date" />
+
+                    <!-- 대화방 이름 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_reservation_inquiry_room_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="12dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        app:failReason="@{viewModel.messageReservationDetail.failReason}"
+                        app:hasFailReason="@{viewModel.messageReservationDetail.hasFailReason}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/barrier_todo_calendar_child"
+                        app:layout_constraintTop_toTopOf="@id/tv_reservation_inquiry_room"
+                        app:roomName="@{viewModel.messageReservationDetail.roomName}"
+                        tools:text="토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 토스랩코리아 " />
+
+                    <!-- 발송 예정 타이틀 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_reservation_inquiry_send_due_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/schedule_msg_send_plan"
+                        android:textColor="@color/reservation_inquiry_text"
+                        android:textSize="@dimen/text_size_12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_reservation_inquiry_room_name"
+                        tools:text="Đã lên lịch" />
+
+                    <!-- 발송 예정일 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_reservation_inquiry_send_expected_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="12dp"
+                        android:textSize="@dimen/text_size_12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/barrier_todo_calendar_child"
+                        app:layout_constraintTop_toTopOf="@id/tv_reservation_inquiry_send_due_date"
+                        app:setReservationDateTextColor="@{viewModel.messageReservationDetail.status}"
+                        app:setReservationSendDate="@{viewModel.messageReservationDetail.reservationDate}"
+                        tools:text="2022/12/11 13:45" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- 예약 메시지 영역 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_reservation_inquiry_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_round_border_light_gray"
+                    android:padding="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_reservation_top_area">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_reservation_inquiry_board_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.messageReservationDetail.boardTitle}"
+                        android:textColor="@color/reservation_inquiry_text"
+                        android:textSize="@dimen/text_size_14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:showBoardTopicTitle="@{viewModel.messageReservationDetail.isBoardTopic}"
+                        tools:text="토스랩 가디언즈 멤버 투표가 오늘로 마감됩니다.(오후 5시 마감)"
+                        tools:visibility="gone" />
+
+                    <!-- 예약 메시지 본문 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_reservation_inquiry_content"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:bufferType="spannable"
+                        android:textColor="@color/reservation_inquiry_text"
+                        android:textSize="@dimen/text_size_13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_reservation_inquiry_board_title"
+                        app:layout_goneMarginTop="0dp"
+                        app:textStringBuilder="@{viewModel.messageReservationDetail.content}"
+                        tools:text="all 우리가 함께하는 토스랩을 더 건전하게, 좋은 방향으로 함께 발전시켜 볼 토스랩 가디언즈 멤버들을 우리의 손으로 직접 뽑아보아요.\n\n추천해주신 멤버분들, 그리고 흔쾌히 후보자가 되어주신 멤버분들 모두 다시 한번 감사하다는 인사를 전합니다. \n\n링크를 클릭하셔서, 5명의 후보 멤버들 중, 내 마음속 '토스랩 가디언즈'를 가장 잘 이끌어주실 멤버를 선택해주시기 바랍니다.\n(✔️ 최대 3명의 멤버를 선택할 수 있습니다.)\n\n📌투표는 10월 17일(월) ~ 10월 19일(수) 까지 진행합니다.📌우리 토스랩 멤버 전원 투표 참석이에요 \n🖐️우리 멤버들의 소중한 한표를 꼭 행사해주세요.\n\n토스랩 가디언즈 멤버 투표하러 가기" />
+
+                    <!-- 예약 메시지 첨부파일 -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_reservation_inquiry_file_group"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:visibility='@{safeUnbox(viewModel.messageReservationDetail.isShowAttachment) ? View.VISIBLE : View.GONE, default="gone"}'
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_reservation_inquiry_content"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/item_file_group_file" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
